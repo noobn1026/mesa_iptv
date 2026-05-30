@@ -12,14 +12,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - uses: subosito/flutter-action@v2
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          flutter-version: '3.22.0'
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.9'
           channel: 'stable'
       
-      - run: flutter clean
-      - run: flutter pub get
-      - run: flutter build apk --release --split-per-abi
+      - name: Clean and get packages
+        run: |
+          flutter clean
+          flutter pub get
+      
+      - name: Build APK
+        run: flutter build apk --release --split-per-abi
       
       - name: Upload APK
         uses: actions/upload-artifact@v4
